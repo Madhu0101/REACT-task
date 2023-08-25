@@ -31,162 +31,126 @@ function Home() {
   );
   }
 
-  export function File() {
-    const [selectedFiles, setSelectedFiles] = useState([]);
-    const [progress, setProgress] = useState(0);
-    const [uploading, setUploading] = useState(false);
-    const [uploadedFiles, setUploadedFiles] = useState([]);
-  
-    const allowedFormats = ['.jpeg', '.png', '.jpg', '.bmp', '.webp'];
-  
-    const handleFileChange = (event) => {
-      const files = Array.from(event.target.files);
-  
-      const filteredFiles = files.filter((file) => {
+export function File() {
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [progress, setProgress] = useState(0);
+  const [uploading, setUploading] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [errorUploadMessage, setErrorUploadMessage] = useState('');
+
+  const allowedFormats = ['.jpeg', '.png', '.jpg', '.bmp', '.webp'];
+
+  const handleFileChange = (event) => {
+    const files = Array.from(event.target.files);
+    const invalidFiles = [];
+
+    const filteredFiles = files.filter((file) => {
+      const extension = file.name.split('.').pop().toLowerCase();
+      const validFormat = allowedFormats.includes('.' + extension);
+      const validSize = file.size <= 5 * 1024 * 1024; // 5MB limit
+
+      if (!validSize) {
+        invalidFiles.push(file.name + ' (exceeds 5MB)');
+      }
+
+      if (!validFormat) {
+        invalidFiles.push(file.name + ' (unsupported format)');
+      }
+
+      return validFormat && validSize;
+    });
+
+    setSelectedFiles(filteredFiles);
+
+    if (invalidFiles.length > 0) {
+      setErrorUploadMessage(`The following file(s) have issues:\n${invalidFiles.join('\n')}`);
+    } else {
+      setErrorUploadMessage('');
+    }
+  };
+
+  const handleUpload = async () => {
+    try {
+      setUploading(true);
+      setProgress(0);
+
+      const invalidFiles = [];
+
+      for (let i = 0; i < selectedFiles.length; i++) {
+        const file = selectedFiles[i];
+
         const extension = file.name.split('.').pop().toLowerCase();
-        return allowedFormats.includes('.' + extension) && file.size <= 5 * 1024 * 1024;
-      });
-  
-      setSelectedFiles(filteredFiles);
-    };
-  
-    const handleUpload = async () => {
-      try {
-        setUploading(true);
-        setProgress(0);
-  
-        for (let i = 0; i < selectedFiles.length; i++) {
-          const file = selectedFiles[i];
-  
+        const validFormat = allowedFormats.includes('.' + extension);
+        const validSize = file.size <= 5 * 1024 * 1024; // 5MB limit
+
+        if (!validSize) {
+          invalidFiles.push(file.name + ' (exceeds 5MB)');
+        }
+
+        if (!validFormat) {
+          invalidFiles.push(file.name + ' (unsupported format)');
+        }
+
+        if (validFormat && validSize) {
+          // Simulate upload delay
           await new Promise((resolve) => setTimeout(resolve, 1000));
-  
+
+          // Simulate successful upload
           setUploadedFiles((prevUploadedFiles) => [...prevUploadedFiles, file]);
-  
+
           setProgress(((i + 1) / selectedFiles.length) * 100);
         }
-  
-        setSelectedFiles([]);
-        setUploading(false);
-        setProgress(0);
-      } catch (error) {
-        console.error('Error during upload:', error);
-        setUploading(false);
-        setProgress(0);
       }
-    };
-  
-    const handleDeleteFile = (index) => {
-      const updatedUploadedFiles = [...uploadedFiles];
-      updatedUploadedFiles.splice(index, 1);
-      setUploadedFiles(updatedUploadedFiles);
-    };
-  
-    return (
-      <div className="choose-file">
-        <h2>Choose A File </h2>
-        <div className="innerchoose-file">
-          <input type="file" multiple onChange={handleFileChange} accept=".jpeg, .png, .jpg, .bmp, .webp" />
-          <button onClick={handleUpload} disabled={uploading || selectedFiles.length === 0}>
-            Upload!!
-          </button>
-          {uploading && <p>Uploading...</p>}
-          {progress > 0 && <p>Progress: {progress}%</p>}
-          {uploadedFiles.length > 0 && (
-            <div>
-              <h2>Uploaded Files:</h2>
-              <ul>
-                {uploadedFiles.map((file, index) => (
-                  <li key={index}>
-                    {file.name}
-                    <button onClick={() => handleDeleteFile(index)}>Delete</button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
+
+      if (invalidFiles.length > 0) {
+        setErrorUploadMessage(`The following file(s) cannot be uploaded:\n${invalidFiles.join('\n')}`);
+      } else {
+        setErrorUploadMessage('');
+      }
+
+      setSelectedFiles([]);
+      setUploading(false);
+      setProgress(0);
+    } catch (error) {
+      console.error('Error during upload:', error);
+      setUploading(false);
+      setProgress(0);
+    }
+  };
+
+  const handleDeleteFile = (index) => {
+    const updatedUploadedFiles = [...uploadedFiles];
+    updatedUploadedFiles.splice(index, 1);
+    setUploadedFiles(updatedUploadedFiles);
+  };
+
+  return (
+    <div className="choose-file">
+      <h2>Choose A File </h2>
+      <div className="innerchoose-file">
+        <input type="file" multiple onChange={handleFileChange} accept=".jpeg, .png, .jpg, .bmp, .webp" />
+        <button onClick={handleUpload} disabled={uploading || selectedFiles.length === 0}>
+          Upload!!
+        </button>
+        {errorUploadMessage && <p style={{ color: 'red' }}>{errorUploadMessage}</p>}
+        {uploading && <p>Uploading...</p>}
+        {progress > 0 && <p>Progress: {progress}%</p>}
+        {uploadedFiles.length > 0 && (
+          <div>
+            <h2>Uploaded Files:</h2>
+            <ul>
+              {uploadedFiles.map((file, index) => (
+                <li key={index}>
+                  {file.name}
+                  <button onClick={() => handleDeleteFile(index)}>Delete</button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
-    );
-  }
-  
-// export function File() {
-//   const [selectedFiles, setSelectedFiles] = useState([]);
-//   const [progress, setProgress] = useState(0);
-//   const [uploading, setUploading] = useState(false);
-//   const [uploadedFiles, setUploadedFiles] = useState([]);
-
-//   const allowedFormats = ['.jpeg', '.png', '.jpg', '.bmp', '.webp'];
-
-//   const handleFileChange = (event) => {
-//     const files = Array.from(event.target.files);
-
-//     const filteredFiles = files.filter((file) => {
-//       const extension = file.name.split('.').pop().toLowerCase();
-//       return allowedFormats.includes('.' + extension) && file.size <= 5 * 1024 * 1024;
-//     });
-
-//     setSelectedFiles(filteredFiles);
-//   };
-
-//   const handleUpload = async () => {
-//     try {
-//       setUploading(true);
-//       setProgress(0);
-
-//       for (let i = 0; i < selectedFiles.length; i++) {
-//         const file = selectedFiles[i];
-
-      
-//         await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      
-//         setUploadedFiles((prevUploadedFiles) => [...prevUploadedFiles, file]);
-
-//         setProgress(((i + 1) / selectedFiles.length) * 100);
-//       }
-
-//       setSelectedFiles([]);
-//       setUploading(false);
-//       setProgress(0);
-//     } catch (error) {
-//       console.error('Error during upload:', error);
-//       setUploading(false);
-//       setProgress(0);
-//     }
-//   };
-//   const handleDeleteFile = (index) => {
-//     const updatedUploadedFiles = [...uploadedFiles];
-//     updatedUploadedFiles.splice(index, 1);
-//     setUploadedFiles(updatedUploadedFiles);
-//   };
-//   return (
-//     <div className="choose-file">
-//       <h2>Choose A File </h2>
-//       <div className= "innerchoose-file">
-//       <input type="file" multiple onChange={handleFileChange} accept=".jpeg, .png, .jpg, .bmp, .webp" />
-//       <button onClick={handleUpload} disabled={uploading || selectedFiles.length === 0}>
-//         Upload!!
-//       </button>
-//       {uploading && <p>Uploading...</p>}
-//       {progress > 0 && <p>Progress: {progress}%</p>}
-//       {uploadedFiles.length > 0 && (
-//         <div>
-//           <h2>Uploaded Files:</h2>
-//           <ul>
-//             {uploadedFiles.map((file, index) => (
-//               <li key={index}>
-//                 {file.name}
-//                 <button onClick={() => handleDeleteFile(index)}>Delete</button>
-//                 </li>
-//             ))}
-//           </ul>
-//         </div>
-//       )}
-//    </div>
-//     </div>
-//   );
-// }
-
-
+    </div>
+  );
+}
 
 
