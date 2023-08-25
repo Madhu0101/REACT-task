@@ -81,6 +81,7 @@ body {
 } 
 .title_text {
   background-color:aliceblue ;
+  font-family: sans-serif;
 }
 .choose-file {
    display: flex;
