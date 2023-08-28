@@ -1,19 +1,27 @@
+
 body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f4c6c6;
-}
-.app-detail {
+  height: 100vh;
+  width: 100%;
+  background-color: #f5abab;
+  margin: 0;
   font-family: 'Barriecito', cursive;
-  text-align: center;
+}
+
+
+.app-detail {
   padding: 20px;
-  border: 1px solid #ccc;
+  border: 1px solid #736868;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  background-color: #f8f1f1;
+  background-color: #c0bebe;
   width: 100%;
+  text-align: center;
+  font-family: 'Barriecito', cursive;
 }
+
 .app-detail h2 {
   font-size: 2rem;
   margin-bottom: 20px;
@@ -27,38 +35,45 @@ body {
   color: #0a0a0a;
   font-weight: bold;
   transition: color 0.3s ease;
+  text-decoration: none;
 }
 
 .app-detail a:hover {
   color: #007bff;
 }
 
+
 .app-detail .navigation {
   margin-top: 20px;
-  
-} 
-.title_text {
-  background-color:aliceblue ;
-  font-family: sans-serif;
 }
-.choose-file {
-   display: flex;
-   flex-direction: column;
-   align-items: center;
-   margin-top: 40px;
-   padding: 20px;
-   
-   background-color: aliceblue;
-   border: 2px dashed #ccc;
-   border-radius: 10px;
-   justify-content: center;
-  }
 
+
+.title_text {
+  background-color: aliceblue;
+  font-family: sans-serif;
+  text-align: center;
+  padding: 20px;
+}
+
+
+.choose-file {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 40px;
+  padding: 20px;
+  background-color: aliceblue;
+  border: 2px dashed #ccc;
+  border-radius: 10px;
+  justify-content: center;
+}
+
+/* Inner Choose File Container */
 .innerchoose-file {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; 
+  justify-content: center;
   width: 600px;
   height: 300px;
   background-color: white;
@@ -66,18 +81,27 @@ body {
   border-radius: 10px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  
 }
-/* .custom-file-upload {
+
+/* Custom File Upload Button */
+.custom-file-upload {
   display: inline-block;
   padding: 10px 20px;
-  background-color: #4caf50;
+  background-color: #21c829;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-} */
+}
 
-/* .custom-file-upload input { */
-  /* display: none; Hide the actual file input */
-/* } */
+.custom-file-upload input {
+  display: none;
+}
+
+
+.thumbnail {
+  max-width: 100px;
+  max-height: 100px;
+  margin-top: 10px;
+  object-fit: cover;
+}
