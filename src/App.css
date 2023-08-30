@@ -47,6 +47,7 @@ body {
 .title_text {
   background-color: aliceblue;
   text-align: center;
+  margin-top: 20px;
   padding: 20px;
 }
 
@@ -81,9 +82,11 @@ body {
 
 .custom-file-upload {
   display: inline-block;
+  margin-top: 10px;
   padding: 10px 20px;
-  background-color: #21c829;
-  color: white;
+  color: #0a0a0a;
+  background-color: #22bd29;
+  color: rgba(29, 28, 27, 0.778);
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -93,6 +96,61 @@ body {
   display: none;
 }
 
+.selected-files {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.selected-file {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 120px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f5f5f5;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* .selected-file img {
+  max-width: 100px;
+  max-height: 100px;
+  margin-bottom: 10px;
+  object-fit: contain;
+  border-radius: 5px;
+} */
+
+.selected-file button {
+  margin-top: 5px;
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: rgb(11, 0, 0);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.selected-file button:hover {
+  background-color: #f2f4f6;
+}
+
+.selected-file a {
+  display: block;
+  margin-bottom: 5px;
+  color: #333;
+  text-decoration: none;
+}
+
+.selected-file a:hover {
+  text-decoration: underline;
+  background-color: #007bff;
+}
 
 .thumbnail {
   width: 100%;
@@ -100,4 +158,21 @@ body {
   margin-top: 10px;
   object-fit: contain;
   border-radius: 5px;
+}
+
+
+.upload-progress {
+  width: 100%;
+  height: 10px;
+  background-color: #ccc;
+  border-radius: 5px;
+
+  margin-bottom: 10px;
+}
+
+.upload-progress .progress-bar {
+  height: 100%;
+  background-color: #21c829;
+  border-radius: 5px;
+  transition: width 0.3s ease;
 }
